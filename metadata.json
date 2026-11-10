@@ -1,0 +1,6 @@
+{
+  "name": "Apex Velocity",
+  "description": "Award-winning futuristic luxury automotive platform with high-performance hypercars, interactive 3D visualizers, and seamless digital engineering.",
+  "requestFramePermissions": ["camera", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

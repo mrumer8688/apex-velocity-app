@@ -1,0 +1,213 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-dark: #050505;
+    --bg-card: #101010;
+    --accent-orange: #FF5A1F;
+    --text-white: #FFFFFF;
+    --text-gray: #BEBEBE;
+  }
+
+  body {
+    background-color: #050505;
+    color: #FFFFFF;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: 'Space Grotesk', sans-serif;
+  }
+}
+
+/* Frosted Glass Background Utilities */
+.bg-grid-dots {
+  background-image: radial-gradient(rgba(255, 90, 31, 0.25) 0.75px, transparent 0.75px);
+  background-size: 32px 32px;
+}
+
+/* Custom Text Outline Utility */
+.text-stroke-white {
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.35);
+  color: transparent;
+}
+
+.text-stroke-orange {
+  -webkit-text-stroke: 1.5px #FF5A1F;
+  color: transparent;
+}
+
+/* Custom Glassmorphism Styles */
+.glass-panel {
+  background: rgba(16, 16, 16, 0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-panel-orange {
+  background: rgba(255, 90, 31, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 90, 31, 0.3);
+}
+
+.glass-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+}
+
+.glass-card:hover {
+  border-color: rgba(255, 90, 31, 0.45);
+  box-shadow: 0 0 35px rgba(255, 90, 31, 0.2);
+}
+
+.frosted-glass-footer {
+  background: rgba(5, 5, 5, 0.4);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Orange Glow Effect */
+.glow-orange {
+  box-shadow: 0 0 25px rgba(255, 90, 31, 0.45);
+}
+
+.glow-orange-lg {
+  box-shadow: 0 0 60px rgba(255, 90, 31, 0.35);
+}
+
+.text-gradient-orange {
+  background: linear-gradient(135deg, #FFFFFF 30%, #FF5A1F 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #222222;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FF5A1F;
+}
+
+/* Lenis Smooth Scroll */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Continuous Marquee Ticker */
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee 32s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* ==========================================================================
+   Sunset (Warm Golden-Hour) Theme Overrides
+   ========================================================================== */
+html.theme-sunset {
+  --bg-dark: #0a0604;
+  --bg-card: #150c07;
+  --accent-orange: #FF8A00;
+  --text-white: #FFFBF5;
+  --text-gray: #D6C4B8;
+}
+
+html.theme-sunset body {
+  background-color: #080403;
+  color: #FFFBF5;
+  transition: background-color 0.8s ease, color 0.5s ease;
+}
+
+html.theme-sunset .glass-card {
+  background: linear-gradient(135deg, rgba(255, 140, 26, 0.08) 0%, rgba(20, 10, 6, 0.9) 100%);
+  border-color: rgba(255, 160, 50, 0.22);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.75), 0 0 35px rgba(255, 138, 0, 0.12);
+}
+
+html.theme-sunset .glass-card:hover {
+  border-color: rgba(255, 160, 50, 0.6);
+  box-shadow: 0 0 45px rgba(255, 140, 20, 0.35);
+}
+
+html.theme-sunset .glass-panel {
+  background: rgba(24, 13, 8, 0.65);
+  border-color: rgba(255, 160, 60, 0.22);
+}
+
+html.theme-sunset .glass-panel-orange {
+  background: rgba(255, 138, 0, 0.12);
+  border-color: rgba(255, 138, 0, 0.45);
+}
+
+html.theme-sunset .bg-grid-dots {
+  background-image: radial-gradient(rgba(255, 160, 40, 0.35) 0.75px, transparent 0.75px);
+}
+
+html.theme-sunset .glow-orange {
+  box-shadow: 0 0 32px rgba(255, 140, 25, 0.6), 0 0 10px rgba(245, 158, 11, 0.35);
+}
+
+html.theme-sunset .glow-orange-lg {
+  box-shadow: 0 0 70px rgba(255, 140, 25, 0.5), 0 0 30px rgba(245, 158, 11, 0.35);
+}
+
+html.theme-sunset .text-gradient-orange {
+  background: linear-gradient(135deg, #FFF5EA 20%, #FFAA33 60%, #FF5A1F 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+html.theme-sunset ::-webkit-scrollbar-track {
+  background: #080403;
+}
+
+html.theme-sunset ::-webkit-scrollbar-thumb {
+  background: #2a150a;
+}
+
+html.theme-sunset ::-webkit-scrollbar-thumb:hover {
+  background: #FF8A00;
+}
+
