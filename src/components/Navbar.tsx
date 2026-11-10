@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Menu, X, Search, Scale, Scan, Mic, ArrowRight, Truck } from 'lucide-react';
+import { Menu, X, Search, Scale, Scan, Mic, ArrowRight, Truck, Gauge } from 'lucide-react';
 import { MagneticButton } from './MagneticButton';
 import { useScrollSpy } from '../hooks/useScrollSpy';
 import { GlobalSearchModal } from './GlobalSearchModal';
@@ -116,46 +116,44 @@ export const Navbar: React.FC<NavbarProps> = ({
         }}
       >
         {/* Full-width container with guaranteed safe margins and flex alignment */}
-        <div className="w-full max-w-[1440px] mx-auto px-3 sm:px-5 lg:px-8 flex items-center justify-between gap-2 sm:gap-4 lg:gap-6 min-w-0">
+        <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 min-w-0">
           {/* Brand Logo with Apex Glow Indicator - Left aligned */}
-          <a
-            href="#hero"
-            onClick={(e) => handleNavClick(e, '#hero')}
-            className="flex items-center gap-2 sm:gap-3 group shrink-0 focus:outline-none cursor-pointer"
-            aria-label="Apex Motors Home"
-          >
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#FF5A1F] via-[#FF3B00] to-black p-[1px] glow-orange transition-transform duration-300 group-hover:scale-105 shrink-0">
-              <div className="w-full h-full bg-[#080808] rounded-[11px] flex items-center justify-center">
-                <span className="font-display font-black text-base sm:text-xl text-[#FF5A1F] tracking-tighter">
-                  A
+          <div className="flex items-center shrink-0">
+            <a
+              href="#hero"
+              onClick={(e) => handleNavClick(e, '#hero')}
+              className="flex items-center gap-2 sm:gap-3 group shrink-0 focus:outline-none cursor-pointer"
+              aria-label="Apex Motors Home"
+            >
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#FF5A1F] via-[#FF3B00] to-black p-[1px] glow-orange transition-transform duration-300 group-hover:scale-105 shrink-0">
+                <div className="w-full h-full bg-[#080808] rounded-[11px] flex items-center justify-center">
+                  <span className="font-display font-black text-base sm:text-xl text-[#FF5A1F] tracking-tighter">
+                    A
+                  </span>
+                </div>
+              </div>
+              <div className="flex flex-col">
+                <span className="font-display font-extrabold tracking-widest text-sm sm:text-lg uppercase text-white leading-none">
+                  APEX
+                </span>
+                <span className="text-[8px] sm:text-[9px] font-mono tracking-[0.2em] sm:tracking-[0.25em] text-[#FF5A1F] uppercase mt-0.5">
+                  VELOCITY
                 </span>
               </div>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-display font-extrabold tracking-widest text-sm sm:text-lg uppercase text-white leading-none">
-                APEX
-              </span>
-              <span className="text-[8px] sm:text-[9px] font-mono tracking-[0.2em] sm:tracking-[0.25em] text-[#FF5A1F] uppercase mt-0.5">
-                VELOCITY
-              </span>
-            </div>
-          </a>
+            </a>
+          </div>
 
-          {/* Desktop Nav Links - Centered with smart responsive adaptation */}
-          <nav className="hidden lg:flex items-center justify-center gap-0.5 xl:gap-1.5 px-2.5 xl:px-4 py-1.5 rounded-full glass-panel border border-white/10 backdrop-blur-md shrink-0 shadow-lg mx-auto">
+          {/* Desktop Nav Links - All 8 links permanently visible without any being hidden */}
+          <nav className="hidden md:flex items-center justify-center gap-0.5 xl:gap-1 px-2.5 xl:px-3.5 py-1 rounded-full glass-panel border border-white/10 backdrop-blur-md shrink-0 shadow-lg mx-auto">
             {navLinks.map((link) => {
               const isActive = activeSection === link.id;
-              // Secondary links are visible on xl+ screens to keep the navbar balanced on standard laptops
-              const isSecondary = link.id === 'film' || link.id === 'pulse' || link.id === 'global';
 
               return (
                 <a
                   key={link.name}
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className={`relative px-2 xl:px-3 py-1 text-[11px] xl:text-xs font-mono uppercase tracking-wider rounded-full transition-all duration-300 group/navlink cursor-pointer whitespace-nowrap ${
-                    isSecondary ? 'hidden xl:inline-flex' : 'inline-flex'
-                  } items-center ${
+                  className={`relative px-2 xl:px-2.5 py-1 text-[10px] xl:text-[11px] font-mono uppercase tracking-wider rounded-full transition-all duration-300 group/navlink cursor-pointer whitespace-nowrap inline-flex items-center ${
                     isActive
                       ? 'text-white font-bold'
                       : 'text-gray-400 hover:text-white'
@@ -170,7 +168,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     />
                   )}
 
-                  <span className="relative z-10 flex items-center gap-1.5">
+                  <span className="relative z-10 flex items-center gap-1 xl:gap-1.5">
                     {isActive && (
                       <span className="w-1.5 h-1.5 rounded-full bg-[#FF5A1F] shadow-[0_0_6px_#FF5A1F] animate-pulse" />
                     )}
@@ -193,17 +191,17 @@ export const Navbar: React.FC<NavbarProps> = ({
             })}
           </nav>
 
-          {/* Right Action Controls: Separated with clear spacing and guaranteed within viewport */}
-          <div className="flex items-center gap-1.5 sm:gap-2 xl:gap-3 shrink-0 ml-auto lg:ml-0 min-w-0">
-            {/* Real-Time Global Fleet Search Trigger */}
+          {/* Right Action Controls: Equipped with intuitive icons and full functionality */}
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 ml-auto min-w-0 pr-1">
+            {/* 1. Global Fleet Search Trigger with Search Icon & Keyboard Shortcut */}
             <button
               type="button"
               onClick={() => setIsSearchOpen(true)}
-              className="flex items-center gap-1.5 p-2 sm:px-3 sm:py-2 rounded-full transition-all duration-300 border text-xs font-mono tracking-wider cursor-pointer bg-white/5 border-white/10 text-gray-300 hover:text-white hover:border-[#FF5A1F]/50 hover:bg-[#FF5A1F]/10 group shrink-0"
+              className="flex items-center gap-1.5 p-2 sm:px-2.5 sm:py-2 rounded-full transition-all duration-300 border text-xs font-mono tracking-wider cursor-pointer bg-white/5 border-white/10 text-gray-300 hover:text-white hover:border-[#FF5A1F]/50 hover:bg-[#FF5A1F]/10 group shrink-0"
               aria-label="Search fleet and technology"
               title="Search fleet & technology (⌘K)"
             >
-              <Search className="w-4 h-4 sm:w-3.5 sm:h-3.5 text-[#FF5A1F] group-hover:scale-110 transition-transform" />
+              <Search className="w-4 h-4 text-[#FF5A1F] group-hover:scale-110 transition-transform" />
               <span className="text-[11px] font-medium hidden 2xl:inline text-white/70 group-hover:text-white">
                 Search
               </span>
@@ -212,67 +210,55 @@ export const Navbar: React.FC<NavbarProps> = ({
               </kbd>
             </button>
 
-            {/* Ambient Lighting Theme Toggle: Midnight / Sunset */}
+            {/* 2. Ambient Lighting Theme Toggle with Sun/Moon Icons & Real-Time Mood Switching */}
             <ThemeToggle compact className="shrink-0" />
 
-            {/* Language Selector: EN, UR, DE, AR, IT, FR, JA */}
+            {/* 3. Multi-Language Selector with Globe & Country Flags */}
             <LanguageSelector compact className="hidden sm:inline-block shrink-0" />
 
-            {/* Head-to-Head Compare Modal Trigger (Available on ultra-wide screens, and always in drawer/search) */}
+            {/* 4. Head-to-Head Compare Modal Trigger with Scale Icon */}
             {onOpenCompare && (
               <button
                 type="button"
                 onClick={onOpenCompare}
-                className="hidden 2xl:flex items-center gap-2 px-3.5 py-2 rounded-full transition-all duration-300 border text-xs font-mono tracking-wider cursor-pointer bg-white/5 border-white/10 text-gray-300 hover:text-white hover:border-[#FF5A1F]/50 hover:bg-[#FF5A1F]/10 group shrink-0"
+                className="hidden md:flex items-center justify-center p-2 rounded-full transition-all duration-300 border text-xs font-mono tracking-wider cursor-pointer bg-white/5 border-white/10 text-gray-300 hover:text-white hover:border-[#FF5A1F]/50 hover:bg-[#FF5A1F]/10 group shrink-0"
                 aria-label={t('nav.compare', 'Compare Hypercars')}
                 title={t('nav.compare', 'Compare Hypercars Side-by-Side')}
               >
-                <Scale className="w-3.5 h-3.5 text-[#FF5A1F] group-hover:scale-110 transition-transform" />
-                <span className="text-[11px] font-medium text-white/70 group-hover:text-white">
-                  {t('nav.compare', 'Compare')}
-                </span>
+                <Scale className="w-4 h-4 text-[#FF5A1F] group-hover:scale-110 transition-transform" />
               </button>
             )}
 
-            {/* Global Delivery Options Calculator Trigger (Available on ultra-wide screens, and always in drawer/cards) */}
-            {onOpenDelivery && (
-              <button
-                type="button"
-                onClick={onOpenDelivery}
-                className="hidden 2xl:flex items-center gap-1.5 px-3 py-2 rounded-full transition-all duration-300 border text-xs font-mono tracking-wider cursor-pointer bg-white/5 border-white/10 text-gray-300 hover:text-white hover:border-[#FF5A1F]/50 hover:bg-[#FF5A1F]/10 group shrink-0"
-                aria-label="Delivery Options & Shipping Calculator"
-                title="Calculate Estimated Shipping Timelines"
-              >
-                <Truck className="w-3.5 h-3.5 text-[#FF5A1F] group-hover:scale-110 transition-transform" />
-                <span className="text-[11px] font-medium text-white/70 group-hover:text-white">
-                  Delivery
-                </span>
-              </button>
-            )}
 
-            {/* Primary Action Button (Test Drive) - Always visible, never cut off */}
+            {/* 6. Primary Action Button: VIP Test Drive with Tachometer/Gauge Icon & Modal Booking */}
             <MagneticButton
               variant="primary"
               onClick={onOpenTestDrive}
-              className="hidden sm:inline-flex py-2 px-3.5 sm:px-4 lg:px-5 text-xs font-semibold tracking-wider whitespace-nowrap shrink-0"
+              className="hidden sm:inline-flex py-2 px-3.5 sm:px-4 lg:px-5 text-xs font-semibold tracking-wider whitespace-nowrap shrink-0 shadow-md group cursor-pointer"
+              title="Book VIP Track & Road Test Drive"
+              aria-label="Book VIP Test Drive"
             >
-              {t('nav.testDrive', 'Test Drive')}
+              <Gauge className="w-4 h-4 text-white group-hover:rotate-45 transition-transform duration-300 shrink-0" />
+              <span>{t('nav.testDrive', 'Test Drive')}</span>
             </MagneticButton>
 
-            {/* Compact Mobile Test Drive Button */}
+            {/* 7. Compact Mobile Test Drive Button with Gauge Icon */}
             <button
               type="button"
               onClick={onOpenTestDrive}
-              className="sm:hidden px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#FF5A1F] to-[#FF3B00] text-black font-mono text-[11px] uppercase font-bold tracking-wider hover:brightness-110 transition-all glow-orange whitespace-nowrap shrink-0"
+              className="sm:hidden flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#FF5A1F] to-[#FF3B00] text-black font-mono text-[11px] uppercase font-bold tracking-wider hover:brightness-110 transition-all glow-orange whitespace-nowrap shrink-0 cursor-pointer"
+              title="Book VIP Test Drive"
+              aria-label="Book VIP Test Drive"
             >
-              {t('nav.testDrive', 'Drive')}
+              <Gauge className="w-3.5 h-3.5 text-black shrink-0" />
+              <span>{t('nav.testDrive', 'Drive')}</span>
             </button>
 
-            {/* Mobile-Only Menu Button */}
+            {/* 8. Mobile-Only Menu Button with Animated Icon & Full Telemetry Drawer Trigger */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 sm:p-2.5 rounded-xl glass-panel border border-white/15 text-white hover:text-[#FF5A1F] hover:border-[#FF5A1F]/50 transition-all focus:outline-none cursor-pointer flex items-center justify-center group shrink-0"
+              className="md:hidden p-2 sm:p-2.5 rounded-xl glass-panel border border-white/15 text-white hover:text-[#FF5A1F] hover:border-[#FF5A1F]/50 transition-all focus:outline-none cursor-pointer flex items-center justify-center group shrink-0"
               aria-label="Toggle Navigation Menu"
               aria-expanded={mobileMenuOpen}
               title="Menu & Concierge"
@@ -280,11 +266,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               {mobileMenuOpen ? (
                 <X className="w-5 h-5 text-[#FF5A1F]" />
               ) : (
-                <div className="flex flex-col gap-1 w-5 h-4 justify-center items-center">
-                  <span className="w-5 h-[2px] bg-white group-hover:bg-[#FF5A1F] transition-all rounded-full" />
-                  <span className="w-3.5 h-[2px] bg-[#FF5A1F] transition-all rounded-full group-hover:w-5" />
-                  <span className="w-5 h-[2px] bg-white group-hover:bg-[#FF5A1F] transition-all rounded-full" />
-                </div>
+                <Menu className="w-5 h-5 text-white group-hover:text-[#FF5A1F] transition-colors" />
               )}
             </button>
           </div>

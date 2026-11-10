@@ -246,7 +246,7 @@ export const ARTelemetryHUD: React.FC<ARTelemetryHUDProps> = ({ car, rotation = 
 
   // Live simulation update loop
   const updateTelemetry = useCallback((now: number) => {
-    const dt = Math.min((now - lastTimeRef.current) / 1000, 0.1);
+    const dt = Math.max(0, Math.min((now - (lastTimeRef.current || now)) / 1000, 0.1));
     lastTimeRef.current = now;
 
     // 1. Lap Timer Progression
@@ -264,16 +264,31 @@ export const ARTelemetryHUD: React.FC<ARTelemetryHUDProps> = ({ car, rotation = 
       }
     }
 
-    // 2. Simulated Track Cornering Phase Evolution
-    cornerPhaseTimeRef.current += dt;
-    const currentPhaseIdx = Math.floor((cornerPhaseTimeRef.current / 4.2) % trackPhases.length);
+    // 2. Simulated Track Cornering Phase Evolution with Safe Indexing
+    cornerPhaseTimeRef.current = Math.max(0, cornerPhaseTimeRef.current + dt);
+    const safePhasesLength = Math.max(1, trackPhases.length);
+    const rawIdx = Math.floor(cornerPhaseTimeRef.current / 4.2);
+    const currentPhaseIdx = ((rawIdx % safePhasesLength) + safePhasesLength) % safePhasesLength;
     setActivePhaseIndex(currentPhaseIdx);
-    const currentPhase = trackPhases[currentPhaseIdx];
-    setCurrentSector(currentPhase.sector);
+    const currentPhase = trackPhases[currentPhaseIdx] || trackPhases[0] || {
+      name: 'MAIN STRAIGHT ACCEL',
+      turnCode: 'STR-1',
+      turnName: 'Pit Straight',
+      targetLatG: 0.05,
+      targetLongG: 1.35,
+      sector: 'S1',
+      radiusMeters: 9999,
+      turnDirection: 'STRAIGHT',
+      apexSpeedTargetMph: 220,
+      bankAngleDeg: 0,
+    };
+    if (currentPhase && currentPhase.sector) {
+      setCurrentSector(currentPhase.sector);
+    }
 
     // 3. User Steering Bias from 3D dragging + Track Cornering
-    const userYawBias = Math.sin(rotation.y || 0) * 1.1;
-    const baseLatG = currentPhase.targetLatG + userYawBias;
+    const userYawBias = Math.sin(rotation?.y || 0) * 1.1;
+    const baseLatG = (currentPhase?.targetLatG ?? 0) + userYawBias;
     const currentLatG = parseFloat((baseLatG + (Math.random() * 0.08 - 0.04)).toFixed(2));
     setLateralG(currentLatG);
 
@@ -351,7 +366,7 @@ export const ARTelemetryHUD: React.FC<ARTelemetryHUDProps> = ({ car, rotation = 
         setTorque(Math.round(140 + Math.random() * 20));
         setGear(currentSpeedRef.current < 2 ? 'N' : (isElectric ? 'D' : targetGear));
         setBoostPsi(parseFloat(Math.max(0.1, boostPsi - 12 * dt).toFixed(1)));
-        setLongitudinalG(parseFloat((currentPhase.targetLongG * 0.8).toFixed(2)));
+        setLongitudinalG(parseFloat(((currentPhase?.targetLongG ?? 1.0) * 0.8).toFixed(2)));
       } else {
         // Idle state with subtle engine vibration
         setSpeed(0);
@@ -359,7 +374,7 @@ export const ARTelemetryHUD: React.FC<ARTelemetryHUDProps> = ({ car, rotation = 
         setRpm(1050 + Math.round(Math.sin(now * 0.005) * 45));
         setTorque(Math.round(85 + Math.sin(now * 0.004) * 8));
         setBoostPsi(0.2);
-        setLongitudinalG(parseFloat((currentPhase.targetLongG * 0.3).toFixed(2)));
+        setLongitudinalG(parseFloat(((currentPhase?.targetLongG ?? 0.5) * 0.3).toFixed(2)));
       }
     }
 
@@ -367,7 +382,7 @@ export const ARTelemetryHUD: React.FC<ARTelemetryHUDProps> = ({ car, rotation = 
     setGTrail((prev) => {
       const nextPoint = {
         x: Math.max(-1.9, Math.min(1.9, currentLatG)),
-        y: Math.max(-1.9, Math.min(1.9, currentPhase.targetLongG)),
+        y: Math.max(-1.9, Math.min(1.9, currentPhase?.targetLongG ?? 0)),
         alpha: 1.0,
       };
       const updated = [nextPoint, ...prev.slice(0, 5)].map((p) => ({

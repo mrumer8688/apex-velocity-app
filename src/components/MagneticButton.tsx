@@ -22,10 +22,10 @@ export const MagneticButton: React.FC<MagneticButtonProps> = ({
     if (!ref.current) return;
     const { left, top, width, height } = ref.current.getBoundingClientRect();
     // Dampened and clamped to prevent button from spilling outside its container
-    const rawX = (e.clientX - (left + width / 2)) * 0.22;
-    const rawY = (e.clientY - (top + height / 2)) * 0.22;
-    const x = Math.max(-12, Math.min(12, rawX));
-    const y = Math.max(-8, Math.min(8, rawY));
+    const rawX = (e.clientX - (left + width / 2)) * 0.18;
+    const rawY = (e.clientY - (top + height / 2)) * 0.18;
+    const x = Math.max(-8, Math.min(6, rawX));
+    const y = Math.max(-6, Math.min(6, rawY));
     setPosition({ x, y });
   };
 
