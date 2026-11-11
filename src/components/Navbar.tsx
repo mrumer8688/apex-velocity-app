@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Menu, X, Search, Scale, Scan, Mic, ArrowRight, Truck, Gauge } from 'lucide-react';
+import { Menu, X, Search, Scale, Scan, ArrowRight, Truck, Gauge } from 'lucide-react';
 import { MagneticButton } from './MagneticButton';
 import { useScrollSpy } from '../hooks/useScrollSpy';
 import { GlobalSearchModal } from './GlobalSearchModal';
@@ -15,7 +15,6 @@ interface NavbarProps {
   onSelectCar?: (car: CarModel) => void;
   onOpenCompare?: () => void;
   onOpenAR?: () => void;
-  onOpenConcierge?: () => void;
   onOpenDelivery?: () => void;
 }
 
@@ -24,7 +23,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   onSelectCar,
   onOpenCompare,
   onOpenAR,
-  onOpenConcierge,
   onOpenDelivery,
 }) => {
   const { isSunset } = useTheme();
@@ -83,14 +81,6 @@ export const Navbar: React.FC<NavbarProps> = ({
         window.scrollTo({ top: y, behavior: 'smooth' });
       }
       setMobileMenuOpen(false);
-    }
-  };
-
-  const handleOpenVoiceConcierge = () => {
-    if (onOpenConcierge) {
-      onOpenConcierge();
-    } else {
-      window.dispatchEvent(new CustomEvent('open-voice-concierge'));
     }
   };
 
@@ -221,11 +211,14 @@ export const Navbar: React.FC<NavbarProps> = ({
               <button
                 type="button"
                 onClick={onOpenCompare}
-                className="hidden md:flex items-center justify-center p-2 rounded-full transition-all duration-300 border text-xs font-mono tracking-wider cursor-pointer bg-white/5 border-white/10 text-gray-300 hover:text-white hover:border-[#FF5A1F]/50 hover:bg-[#FF5A1F]/10 group shrink-0"
+                className="flex items-center gap-1.5 p-2 sm:px-2.5 sm:py-2 rounded-full transition-all duration-300 border text-xs font-mono tracking-wider cursor-pointer bg-white/5 border-white/10 text-gray-300 hover:text-white hover:border-[#FF5A1F]/50 hover:bg-[#FF5A1F]/10 group shrink-0"
                 aria-label={t('nav.compare', 'Compare Hypercars')}
                 title={t('nav.compare', 'Compare Hypercars Side-by-Side')}
               >
                 <Scale className="w-4 h-4 text-[#FF5A1F] group-hover:scale-110 transition-transform" />
+                <span className="text-[11px] font-medium hidden 2xl:inline text-white/70 group-hover:text-white">
+                  {t('nav.compare', 'Compare')}
+                </span>
               </button>
             )}
 
@@ -411,21 +404,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                       </span>
                     </button>
                   )}
-
-                  {/* Voice Concierge */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      handleOpenVoiceConcierge();
-                    }}
-                    className="p-3 rounded-xl border border-white/10 bg-white/5 text-gray-200 flex flex-col items-center justify-center gap-1.5 transition-colors hover:border-[#FF5A1F]/40 hover:bg-[#FF5A1F]/10 text-center cursor-pointer"
-                  >
-                    <Mic className="w-4 h-4 text-[#FF5A1F]" />
-                    <span className="font-mono text-[11px] uppercase tracking-wider font-semibold text-white/80">
-                      Voice AI
-                    </span>
-                  </button>
 
                   {/* Delivery Options & Shipping Calculator */}
                   {onOpenDelivery && (

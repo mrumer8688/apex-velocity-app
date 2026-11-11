@@ -11,7 +11,19 @@ export function useLenis() {
       smoothWheel: true,
       wheelMultiplier: 1.0,
       touchMultiplier: 1.5,
+      prevent: (node) => {
+        return (
+          node.hasAttribute('data-lenis-prevent') ||
+          Boolean(node.closest('[data-lenis-prevent]')) ||
+          Boolean(node.closest('.lenis-prevent')) ||
+          Boolean(node.closest('[role="dialog"]')) ||
+          Boolean(node.closest('.fixed'))
+        );
+      },
     });
+
+    // Make lenis instance accessible for modal components if needed
+    (window as any).__lenis = lenis;
 
     function raf(time: number) {
       lenis.raf(time);
@@ -23,6 +35,7 @@ export function useLenis() {
     return () => {
       cancelAnimationFrame(rafId);
       lenis.destroy();
+      delete (window as any).__lenis;
     };
   }, []);
 }

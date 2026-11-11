@@ -61,6 +61,18 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
+  // Stop Lenis when modal is open so mouse wheel scrolls normally
+  useEffect(() => {
+    if (isOpen) {
+      (window as any).__lenis?.stop();
+    } else {
+      (window as any).__lenis?.start();
+    }
+    return () => {
+      (window as any).__lenis?.start();
+    };
+  }, [isOpen]);
+
   const cleanQuery = query.toLowerCase().trim();
 
   // Filter cars
@@ -104,12 +116,21 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-black/80 backdrop-blur-xl overflow-y-auto">
+      <div
+        data-lenis-prevent="true"
+        role="dialog"
+        aria-modal="true"
+        className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-black/80 backdrop-blur-xl overflow-y-auto"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) onClose();
+        }}
+      >
         <motion.div
           initial={{ opacity: 0, scale: 0.96, y: -20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: -20 }}
           transition={{ duration: 0.2 }}
+          data-lenis-prevent="true"
           className="relative w-full max-w-3xl glass-card rounded-3xl border border-white/20 shadow-[0_25px_60px_rgba(0,0,0,0.8)] bg-black/90 overflow-hidden flex flex-col mb-12"
         >
           {/* Search Header Bar */}
@@ -180,7 +201,11 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
           </div>
 
           {/* Search Results Area */}
-          <div className="max-h-[60vh] overflow-y-auto p-4 sm:p-6 space-y-6">
+          <div
+            data-lenis-prevent="true"
+            onWheel={(e) => e.stopPropagation()}
+            className="max-h-[60vh] overflow-y-auto overscroll-contain p-4 sm:p-6 space-y-6"
+          >
             {/* Section 1: Hypercars */}
             {(selectedCategory === 'all' || selectedCategory === 'cars') && (
               <div>

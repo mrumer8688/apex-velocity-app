@@ -5,7 +5,6 @@ import { CustomCursor } from './components/CustomCursor';
 import { TestDriveModal } from './components/TestDriveModal';
 import { CarDetailModal } from './components/CarDetailModal';
 import { CompareVehiclesModal } from './components/CompareVehiclesModal';
-import { VoiceConcierge } from './components/VoiceConcierge';
 import { CarARViewerModal } from './components/CarARViewerModal';
 import { DeliveryOptions } from './components/DeliveryOptions';
 import { LoadingProgressBar } from './components/LoadingProgressBar';
@@ -52,8 +51,12 @@ export default function App() {
   };
 
   const handleOpenCompare = (carA?: CarModel | null, carB?: CarModel | null) => {
-    if (carA) setCompareCarA(carA);
-    if (carB) setCompareCarB(carB);
+    const firstCar = carA || CARS_DATA[0];
+    const secondCar =
+      carB ||
+      (firstCar.id === CARS_DATA[0].id ? CARS_DATA[1] : CARS_DATA[0]);
+    setCompareCarA(firstCar);
+    setCompareCarB(secondCar);
     setCompareModalOpen(true);
   };
 
@@ -224,14 +227,6 @@ export default function App() {
         carA={compareCarA}
         carB={compareCarB}
         onOpenTestDrive={(carId) => handleOpenTestDrive(carId)}
-      />
-
-      {/* Voice-Controlled Luxury Concierge HUD with Microphone Waveform Visualizer */}
-      <VoiceConcierge
-        onSelectCar={(car) => setActiveCarModal(car)}
-        onOpenTestDrive={(carId) => handleOpenTestDrive(carId)}
-        onOpenCompare={(carA, carB) => handleOpenCompare(carA, carB)}
-        onOpenAR={(car) => handleOpenAR(car)}
       />
 
       {/* Camera Augmented Reality Virtual Hypercar Placement Modal */}

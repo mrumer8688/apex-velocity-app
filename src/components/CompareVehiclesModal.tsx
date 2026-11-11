@@ -116,11 +116,30 @@ export const CompareVehiclesModal: React.FC<CompareVehiclesModalProps> = ({
   );
   const [radarHoveredMetric, setRadarHoveredMetric] = useState<string | null>(null);
 
-  // Sync if props change
+  // Sync if props change or modal opens
   React.useEffect(() => {
-    if (propCarA) setSelectedIdA(propCarA.id);
-    if (propCarB) setSelectedIdB(propCarB.id);
-  }, [propCarA, propCarB]);
+    if (isOpen) {
+      const defaultA = propCarA?.id || CARS_DATA[0]?.id || '';
+      const defaultB =
+        propCarB?.id ||
+        (defaultA === CARS_DATA[0]?.id ? CARS_DATA[1]?.id : CARS_DATA[0]?.id) ||
+        '';
+      setSelectedIdA(defaultA);
+      setSelectedIdB(defaultB);
+    }
+  }, [isOpen, propCarA, propCarB]);
+
+  // Stop Lenis when comparison modal is open so mouse wheel scrolls inside benchmark smoothly
+  React.useEffect(() => {
+    if (isOpen) {
+      (window as any).__lenis?.stop();
+    } else {
+      (window as any).__lenis?.start();
+    }
+    return () => {
+      (window as any).__lenis?.start();
+    };
+  }, [isOpen]);
 
   const carA = CARS_DATA.find((c) => c.id === selectedIdA) || CARS_DATA[0];
   const carB = CARS_DATA.find((c) => c.id === selectedIdB) || CARS_DATA[1];
@@ -134,13 +153,11 @@ export const CompareVehiclesModal: React.FC<CompareVehiclesModalProps> = ({
   // Escape key dismiss
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (isOpen && e.key === 'Escape') onClose();
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose]);
-
-  if (!isOpen) return null;
+  }, [isOpen, onClose]);
 
   // Metric parsing for direct comparative calculations
   const accA = parseNum(carA.acceleration);
@@ -163,7 +180,7 @@ export const CompareVehiclesModal: React.FC<CompareVehiclesModalProps> = ({
   const winnerWeight = weightA && weightB ? (weightA < weightB ? 'A' : weightA > weightB ? 'B' : 'TIE') : null;
   const winnerPtw = ptwA && ptwB ? (ptwA > ptwB ? 'A' : ptwA < ptwB ? 'B' : 'TIE') : null;
 
-  // Dynamic performance metrics for Radar Chart
+  // Dynamic performance metrics for Radar Chart (called unconditionally)
   const metricsA = useMemo(() => computeRadarMetrics(carA), [carA]);
   const metricsB = useMemo(() => computeRadarMetrics(carB), [carB]);
 
@@ -204,18 +221,24 @@ export const CompareVehiclesModal: React.FC<CompareVehiclesModalProps> = ({
 
   return (
     <AnimatePresence>
-      <div
-        className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-2xl overflow-y-auto"
-        onClick={(e) => {
-          if (e.target === e.currentTarget) onClose();
-        }}
-      >
+      {isOpen && (
+        <div
+          data-lenis-prevent="true"
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/85 backdrop-blur-2xl overflow-y-auto"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) onClose();
+          }}
+        >
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 30 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 30 }}
           transition={{ duration: 0.3 }}
-          className="relative w-full max-w-6xl glass-card rounded-3xl border border-white/15 bg-black/90 shadow-[0_25px_60px_rgba(0,0,0,0.9)] max-h-[92vh] overflow-y-auto my-auto flex flex-col"
+          data-lenis-prevent="true"
+          onWheel={(e) => e.stopPropagation()}
+          className="relative w-full max-w-6xl glass-card rounded-3xl border border-white/15 bg-black/90 shadow-[0_25px_60px_rgba(0,0,0,0.9)] max-h-[92vh] overflow-y-auto overscroll-contain my-auto flex flex-col"
         >
           {/* Top Modal Header Bar */}
           <div className="sticky top-0 z-30 p-4 sm:p-6 bg-[#080808]/90 backdrop-blur-xl border-b border-white/10 flex items-center justify-between">
@@ -440,8 +463,8 @@ export const CompareVehiclesModal: React.FC<CompareVehiclesModalProps> = ({
               <div className="flex flex-col lg:flex-row items-center gap-6">
                 {/* Radar Visualizer Canvas */}
                 <div className="w-full lg:w-1/2 flex flex-col items-center justify-center">
-                  <div className="w-full h-[280px] sm:h-[320px] relative">
-                    <ResponsiveContainer width="100%" height="100%">
+                  <div className="w-full h-[280px] sm:h-[320px] relative min-h-[280px]">
+                    <ResponsiveContainer width="100%" height="100%" minWidth={240} minHeight={240}>
                       <RadarChart cx="50%" cy="50%" outerRadius="72%" data={radarData}>
                         <PolarGrid
                           stroke="rgba(255, 255, 255, 0.15)"
@@ -936,6 +959,7 @@ export const CompareVehiclesModal: React.FC<CompareVehiclesModalProps> = ({
           </div>
         </motion.div>
       </div>
+      )}
     </AnimatePresence>
   );
 };
