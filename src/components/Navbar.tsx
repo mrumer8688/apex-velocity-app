@@ -107,26 +107,22 @@ export const Navbar: React.FC<NavbarProps> = ({
       >
         {/* Full-width container with guaranteed safe margins and flex alignment */}
         <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 min-w-0">
-          {/* Brand Logo with Apex Glow Indicator - Left aligned */}
+          {/* Brand Logo - Futuristic Wordmark */}
           <div className="flex items-center shrink-0">
             <a
               href="#hero"
               onClick={(e) => handleNavClick(e, '#hero')}
-              className="flex items-center gap-2 sm:gap-3 group shrink-0 focus:outline-none cursor-pointer"
+              className="flex items-center group shrink-0 focus:outline-none cursor-pointer"
               aria-label="Apex Motors Home"
             >
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#FF5A1F] via-[#FF3B00] to-black p-[1px] glow-orange transition-transform duration-300 group-hover:scale-105 shrink-0">
-                <div className="w-full h-full bg-[#080808] rounded-[11px] flex items-center justify-center">
-                  <span className="font-display font-black text-base sm:text-xl text-[#FF5A1F] tracking-tighter">
-                    A
+              <div className="flex flex-col py-0.5">
+                <div className="flex items-center gap-1.5">
+                  <span className="font-orbitron font-black tracking-[0.22em] text-lg sm:text-2xl uppercase bg-gradient-to-r from-white via-zinc-100 to-[#FF5A1F] bg-clip-text text-transparent group-hover:drop-shadow-[0_0_16px_rgba(255,90,31,0.5)] transition-all duration-300 leading-none">
+                    APEX
                   </span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#FF5A1F] shadow-[0_0_8px_#FF5A1F] animate-pulse" />
                 </div>
-              </div>
-              <div className="flex flex-col">
-                <span className="font-display font-extrabold tracking-widest text-sm sm:text-lg uppercase text-white leading-none">
-                  APEX
-                </span>
-                <span className="text-[8px] sm:text-[9px] font-mono tracking-[0.2em] sm:tracking-[0.25em] text-[#FF5A1F] uppercase mt-0.5">
+                <span className="font-orbitron font-bold tracking-[0.38em] text-[8px] sm:text-[9.5px] uppercase text-[#FF5A1F] mt-1 group-hover:text-white transition-colors duration-300 leading-none">
                   VELOCITY
                 </span>
               </div>
@@ -287,20 +283,16 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               {/* Drawer Header */}
               <div className="flex items-center justify-between pb-6 border-b border-white/10">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#FF5A1F] to-black p-[1px]">
-                    <div className="w-full h-full bg-[#080808] rounded-[11px] flex items-center justify-center">
-                      <span className="font-display font-black text-sm text-[#FF5A1F]">A</span>
-                    </div>
-                  </div>
-                  <div>
-                    <span className="font-display font-bold tracking-widest text-sm text-white uppercase block">
-                      APEX CONCIERGE
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-2">
+                    <span className="font-orbitron font-black tracking-[0.22em] text-lg text-white uppercase leading-none">
+                      APEX
                     </span>
-                    <span className="text-[9px] font-mono text-[#FF5A1F] tracking-widest uppercase">
-                      VELOCITY ATELIER
-                    </span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#FF5A1F] shadow-[0_0_8px_#FF5A1F] animate-pulse" />
                   </div>
+                  <span className="font-orbitron font-bold tracking-[0.32em] text-[9px] text-[#FF5A1F] uppercase mt-1">
+                    VELOCITY ATELIER
+                  </span>
                 </div>
 
                 <button

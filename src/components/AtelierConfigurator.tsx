@@ -36,7 +36,6 @@ import {
   CarModelContainer,
 } from '../utils/carGeometry';
 import { MagneticButton } from './MagneticButton';
-import { EngineSoundControl } from './EngineSoundControl';
 import { triggerHaptic } from '../utils/haptics';
 
 interface AtelierConfiguratorProps {
@@ -138,7 +137,7 @@ export const AtelierConfigurator: React.FC<AtelierConfiguratorProps> = ({
   const [selectedCar, setSelectedCar] = useState<CarModel>(initialCar || CARS_DATA[0]);
 
   // Active Tab
-  const [activeTab, setActiveTab] = useState<'paint' | 'interior' | 'wheels' | 'acoustics' | 'summary'>('paint');
+  const [activeTab, setActiveTab] = useState<'paint' | 'interior' | 'wheels' | 'summary'>('paint');
 
   // Config State
   const [config, setConfig] = useState<CarConfigState>({
@@ -685,8 +684,15 @@ export const AtelierConfigurator: React.FC<AtelierConfiguratorProps> = ({
             </div>
           </div>
 
-          {/* Integrated Engine Acoustics Quick Console for Currently Selected Hypercar */}
-          <EngineSoundControl car={selectedCar} compact />
+          {/* Atelier Certified Configuration Note */}
+          <div className="p-3 rounded-2xl glass-panel border border-white/10 flex items-center justify-between">
+            <span className="text-[10px] font-mono uppercase text-[#FF5A1F] tracking-widest font-bold">
+              // ATELIER BESPOKE STUDIO
+            </span>
+            <span className="text-[10px] font-mono text-white/50">
+              REAL-TIME 3D TELEMETRY
+            </span>
+          </div>
         </div>
 
         {/* Configuration Controls Column (5 Cols on desktop) */}
@@ -739,22 +745,7 @@ export const AtelierConfigurator: React.FC<AtelierConfiguratorProps> = ({
               <Disc className="w-3.5 h-3.5" />
               <span>Wheels</span>
             </button>
-            <button
-              type="button"
-              onClick={() => {
-                setActiveTab('acoustics');
-                triggerHaptic('light');
-              }}
-              className={`flex-1 py-2.5 px-2 rounded-xl text-xs font-mono uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer ${
-                activeTab === 'acoustics'
-                  ? 'bg-[#FF5A1F] text-black font-bold shadow-[0_0_15px_rgba(255,90,31,0.4)]'
-                  : 'text-white/70 hover:text-[#FF5A1F]'
-              }`}
-            >
-              <Flame className="w-3.5 h-3.5" />
-              <span>Acoustics</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#FF5A1F] animate-pulse" />
-            </button>
+
             <button
               type="button"
               onClick={() => {
@@ -1111,12 +1102,7 @@ export const AtelierConfigurator: React.FC<AtelierConfiguratorProps> = ({
             </div>
           )}
 
-          {/* Tab 4: Engine Acoustics & Exhaust Sound Studio */}
-          {activeTab === 'acoustics' && (
-            <div className="space-y-4">
-              <EngineSoundControl car={selectedCar} />
-            </div>
-          )}
+
 
           {/* Tab 5: Spec Sheet & Price Breakdown */}
           {activeTab === 'summary' && (

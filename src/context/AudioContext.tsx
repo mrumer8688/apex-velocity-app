@@ -17,6 +17,8 @@ interface AudioContextType {
   volume: number;
   setVolume: (v: number) => void;
   // Car engine rev sound integration
+  isRevSoundEnabled: boolean;
+  toggleRevSound: () => void;
   playCarRevSound: (car: CarAudioMetadata) => void;
   stopCarRevSound: () => void;
   isRevving: boolean;
@@ -37,6 +39,8 @@ const AudioContext = createContext<AudioContextType>({
   toggleEngineSound: () => {},
   volume: 0.6,
   setVolume: () => {},
+  isRevSoundEnabled: true,
+  toggleRevSound: () => {},
   playCarRevSound: () => {},
   stopCarRevSound: () => {},
   isRevving: false,
@@ -66,6 +70,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [isEngineSoundOn, setIsEngineSoundOn] = useState(false);
   const [volume, setVolume] = useState(0.6);
   const [revvingCarId, setRevvingCarId] = useState<string | null>(null);
+  const [isRevSoundEnabled, setIsRevSoundEnabled] = useState(true);
 
   // Web Audio API refs for procedural engine rumble
   const audioCtxRef = useRef<AudioContext | null>(null);
@@ -310,9 +315,20 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     duckBackgroundIdle(false);
   }, [duckBackgroundIdle]);
 
+  const toggleRevSound = useCallback(() => {
+    setIsRevSoundEnabled((prev) => {
+      if (prev) {
+        stopCarRevSound();
+      }
+      return !prev;
+    });
+  }, [stopCarRevSound]);
+
   // Play bespoke procedural engine rev for specific car model
   const playCarRevSound = useCallback(
     async (car: CarAudioMetadata) => {
+      if (!isRevSoundEnabled) return;
+
       // If already revving this car, ignore to let full rev cycle play
       if (activeRevRef.current && activeRevRef.current.carId === car.id) {
         return;
@@ -599,7 +615,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         timeoutId,
       };
     },
-    [volume, getOrCreateAudioContext, duckBackgroundIdle, stopCarRevSound]
+    [volume, isRevSoundEnabled, getOrCreateAudioContext, duckBackgroundIdle, stopCarRevSound]
   );
 
   // Clean up all audio on unmount
@@ -620,6 +636,8 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         toggleEngineSound,
         volume,
         setVolume,
+        isRevSoundEnabled,
+        toggleRevSound,
         playCarRevSound,
         stopCarRevSound,
         isRevving: revvingCarId !== null,

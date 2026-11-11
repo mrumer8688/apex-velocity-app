@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Zap, Gauge, Shield, Battery, CheckCircle, ChevronRight, Sparkles, Scan, Scale, TrendingUp, Flame, Volume2, Truck, Sliders } from 'lucide-react';
+import { X, Zap, Gauge, Shield, Battery, CheckCircle, ChevronRight, Sparkles, Scan, Scale, TrendingUp, Flame, Truck, Sliders, Cpu, Activity } from 'lucide-react';
 import { CarModel } from '../types';
 import { MagneticButton } from './MagneticButton';
 import { CarARViewerModal } from './CarARViewerModal';
 import { CarPerformanceSimulation } from './CarPerformanceSimulation';
-import { EngineSoundControl } from './EngineSoundControl';
 import { CarMilestonesTimeline } from './CarMilestonesTimeline';
 import { DeliveryOptions } from './DeliveryOptions';
 import { InteractiveVehicleConfigurator } from './InteractiveVehicleConfigurator';
@@ -25,7 +24,7 @@ export const CarDetailModal: React.FC<CarDetailModalProps> = ({
 }) => {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [arModalOpen, setArModalOpen] = useState(false);
-  const [modalTab, setModalTab] = useState<'architecture' | 'audioEngine' | 'simulation' | 'delivery' | 'configurator'>('architecture');
+  const [modalTab, setModalTab] = useState<'techSpecs' | 'architecture' | 'simulation' | 'delivery' | 'configurator'>('techSpecs');
 
   if (!car) return null;
 
@@ -89,9 +88,24 @@ export const CarDetailModal: React.FC<CarDetailModalProps> = ({
                 ))}
               </div>
 
-              {/* Direct Engine Ignition & Exhaust Sound Control */}
-              <div className="pt-2">
-                <EngineSoundControl car={car} compact />
+              {/* Vehicle Provenance & Bespoke Certification Badge */}
+              <div className="p-3.5 rounded-2xl glass-panel border border-white/10 flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-[#FF5A1F]/15 border border-[#FF5A1F]/30 flex items-center justify-center text-[#FF5A1F]">
+                    <Shield className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-mono uppercase text-[#FF5A1F] block tracking-wider font-bold">
+                      ATELIER CERTIFIED SPEC
+                    </span>
+                    <span className="text-xs text-white/80 font-mono">
+                      {car.specs.chassis.split(' ')[0] || 'Carbon'} Monocoque Chassis
+                    </span>
+                  </div>
+                </div>
+                <span className="px-2.5 py-1 rounded-lg text-[10px] font-mono uppercase bg-white/5 border border-white/10 text-white/70">
+                  {car.category}
+                </span>
               </div>
             </div>
 
@@ -139,49 +153,49 @@ export const CarDetailModal: React.FC<CarDetailModalProps> = ({
                 </div>
               </div>
 
-              {/* Tab Switcher for Architecture vs Engine Acoustics vs D3 Performance Simulation */}
+              {/* Tab Switcher for Technical Specifications, Architecture & Features, D3 Simulation, Delivery, and 3D Config */}
               <div className="pt-2 border-t border-white/10">
                 <div className="flex items-center gap-1.5 p-1 rounded-2xl glass-panel border border-white/10 mb-4 overflow-x-auto scrollbar-none">
                   <button
                     type="button"
+                    onClick={() => setModalTab('techSpecs')}
+                    className={`flex-1 py-2 px-2.5 rounded-xl text-xs font-mono uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer ${
+                      modalTab === 'techSpecs'
+                        ? 'bg-[#FF5A1F] text-black font-bold shadow-[0_0_15px_rgba(255,90,31,0.4)]'
+                        : 'text-white/70 hover:text-[#FF5A1F]'
+                    }`}
+                  >
+                    <Gauge className="w-3.5 h-3.5" />
+                    <span>Technical Specs</span>
+                  </button>
+                  <button
+                    type="button"
                     onClick={() => setModalTab('architecture')}
-                    className={`flex-1 py-2 px-2 rounded-xl text-xs font-mono uppercase tracking-wider transition-all whitespace-nowrap cursor-pointer ${
+                    className={`flex-1 py-2 px-2.5 rounded-xl text-xs font-mono uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer ${
                       modalTab === 'architecture'
                         ? 'bg-white text-black font-bold shadow-md'
                         : 'text-white/70 hover:text-white'
                     }`}
                   >
-                    Specs & Features
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setModalTab('audioEngine')}
-                    className={`flex-1 py-2 px-2 rounded-xl text-xs font-mono uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer ${
-                      modalTab === 'audioEngine'
-                        ? 'bg-[#FF5A1F] text-black font-bold shadow-[0_0_15px_rgba(255,90,31,0.4)]'
-                        : 'text-white/70 hover:text-[#FF5A1F]'
-                    }`}
-                  >
-                    <Flame className="w-3.5 h-3.5" />
-                    <span>Engine Sound</span>
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#FF5A1F] animate-pulse" />
+                    <CheckCircle className="w-3.5 h-3.5" />
+                    <span>Features</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setModalTab('simulation')}
-                    className={`flex-1 py-2 px-2 rounded-xl text-xs font-mono uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer ${
+                    className={`flex-1 py-2 px-2.5 rounded-xl text-xs font-mono uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer ${
                       modalTab === 'simulation'
                         ? 'bg-[#00E5FF] text-black font-bold shadow-[0_0_15px_rgba(0,229,255,0.4)]'
                         : 'text-white/70 hover:text-[#00E5FF]'
                     }`}
                   >
                     <TrendingUp className="w-3.5 h-3.5" />
-                    <span>D3 Dynamics</span>
+                    <span>Dynamics</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setModalTab('delivery')}
-                    className={`flex-1 py-2 px-2 rounded-xl text-xs font-mono uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer ${
+                    className={`flex-1 py-2 px-2.5 rounded-xl text-xs font-mono uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer ${
                       modalTab === 'delivery'
                         ? 'bg-gradient-to-r from-[#FF5A1F] to-[#FF3B00] text-black font-bold shadow-[0_0_15px_rgba(255,90,31,0.4)]'
                         : 'text-white/70 hover:text-[#FF5A1F]'
@@ -193,7 +207,7 @@ export const CarDetailModal: React.FC<CarDetailModalProps> = ({
                   <button
                     type="button"
                     onClick={() => setModalTab('configurator')}
-                    className={`flex-1 py-2 px-2 rounded-xl text-xs font-mono uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer ${
+                    className={`flex-1 py-2 px-2.5 rounded-xl text-xs font-mono uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer ${
                       modalTab === 'configurator'
                         ? 'bg-gradient-to-r from-[#FF5A1F] to-[#FF3B00] text-black font-bold shadow-[0_0_15px_rgba(255,90,31,0.4)]'
                         : 'text-white/70 hover:text-[#FF5A1F]'
@@ -204,12 +218,221 @@ export const CarDetailModal: React.FC<CarDetailModalProps> = ({
                   </button>
                 </div>
 
-                {modalTab === 'architecture' ? (
+                {modalTab === 'techSpecs' ? (
+                  <div className="space-y-4">
+                    {/* Telemetry Header */}
+                    <div className="flex items-center justify-between pb-1 border-b border-white/10">
+                      <div className="flex items-center gap-2">
+                        <Gauge className="w-4 h-4 text-[#FF5A1F]" />
+                        <span className="text-xs font-mono uppercase tracking-widest text-[#FF5A1F] font-bold">
+                          // TECHNICAL SPECIFICATIONS
+                        </span>
+                      </div>
+                      <span className="text-[10px] font-mono text-white/50 uppercase">
+                        ATELIER BENCHMARK
+                      </span>
+                    </div>
+
+                    {/* Primary Futuristic Grid: Engine Power, Top Speed, Acceleration Figures */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      {/* 1. Engine Power Card */}
+                      <div className="group p-4 rounded-2xl glass-panel border border-white/10 hover:border-[#FF5A1F]/50 bg-gradient-to-b from-white/[0.04] to-black/60 transition-all shadow-lg flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-[10px] font-mono uppercase tracking-widest text-white/50">
+                              ENGINE POWER
+                            </span>
+                            <div className="w-6 h-6 rounded-lg bg-[#FF5A1F]/15 border border-[#FF5A1F]/30 flex items-center justify-center text-[#FF5A1F]">
+                              <Flame className="w-3.5 h-3.5" />
+                            </div>
+                          </div>
+                          <div className="font-orbitron font-black text-2xl sm:text-3xl text-[#FF5A1F] tracking-tight group-hover:scale-105 transition-transform origin-left">
+                            {car.power}
+                          </div>
+                          <span className="text-[10px] font-mono text-white/60 block mt-1">
+                            {parseInt(car.power.replace(/[^0-9]/g, ''))
+                              ? `~${Math.round(parseInt(car.power.replace(/[^0-9]/g, '')) * 0.7457)} kW Output`
+                              : 'Dyno Verified'}
+                          </span>
+                        </div>
+
+                        {/* Visual Progress Bar */}
+                        <div className="mt-3 pt-2 border-t border-white/10">
+                          <div className="flex justify-between text-[9px] font-mono text-white/40 mb-1">
+                            <span>OUTPUT</span>
+                            <span className="text-[#FF5A1F]">MAX TUNED</span>
+                          </div>
+                          <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
+                            <div className="bg-gradient-to-r from-[#FF5A1F] to-[#FF3B00] h-full rounded-full w-[94%]" />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 2. Top Speed Card */}
+                      <div className="group p-4 rounded-2xl glass-panel border border-white/10 hover:border-cyan-400/50 bg-gradient-to-b from-white/[0.04] to-black/60 transition-all shadow-lg flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-[10px] font-mono uppercase tracking-widest text-white/50">
+                              TOP SPEED
+                            </span>
+                            <div className="w-6 h-6 rounded-lg bg-cyan-400/15 border border-cyan-400/30 flex items-center justify-center text-cyan-400">
+                              <Gauge className="w-3.5 h-3.5" />
+                            </div>
+                          </div>
+                          <div className="font-orbitron font-black text-2xl sm:text-3xl text-cyan-400 tracking-tight group-hover:scale-105 transition-transform origin-left">
+                            {car.topSpeed}
+                          </div>
+                          <span className="text-[10px] font-mono text-white/60 block mt-1">
+                            {parseInt(car.topSpeed.replace(/[^0-9]/g, ''))
+                              ? `~${Math.round(parseInt(car.topSpeed.replace(/[^0-9]/g, '')) * 1.60934)} KM/H`
+                              : 'V-Max Velocity'}
+                          </span>
+                        </div>
+
+                        {/* Visual Progress Bar */}
+                        <div className="mt-3 pt-2 border-t border-white/10">
+                          <div className="flex justify-between text-[9px] font-mono text-white/40 mb-1">
+                            <span>AERODYNAMICS</span>
+                            <span className="text-cyan-400">OPTIMAL</span>
+                          </div>
+                          <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
+                            <div className="bg-gradient-to-r from-cyan-500 to-cyan-300 h-full rounded-full w-[92%]" />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 3. Acceleration Card */}
+                      <div className="group p-4 rounded-2xl glass-panel border border-white/10 hover:border-emerald-400/50 bg-gradient-to-b from-white/[0.04] to-black/60 transition-all shadow-lg flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-[10px] font-mono uppercase tracking-widest text-white/50">
+                              ACCELERATION
+                            </span>
+                            <div className="w-6 h-6 rounded-lg bg-emerald-400/15 border border-emerald-400/30 flex items-center justify-center text-emerald-400">
+                              <Zap className="w-3.5 h-3.5" />
+                            </div>
+                          </div>
+                          <div className="font-orbitron font-black text-2xl sm:text-3xl text-emerald-400 tracking-tight group-hover:scale-105 transition-transform origin-left">
+                            {car.acceleration}
+                          </div>
+                          <span className="text-[10px] font-mono text-white/60 block mt-1">
+                            0-60 MPH // Sprint Time
+                          </span>
+                        </div>
+
+                        {/* Visual Progress Bar */}
+                        <div className="mt-3 pt-2 border-t border-white/10">
+                          <div className="flex justify-between text-[9px] font-mono text-white/40 mb-1">
+                            <span>LAUNCH G</span>
+                            <span className="text-emerald-400">SUB-2S</span>
+                          </div>
+                          <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
+                            <div className="bg-gradient-to-r from-emerald-500 to-emerald-300 h-full rounded-full w-[96%]" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Clean Secondary Specifications Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1 text-xs">
+                      {/* Powertrain Detail */}
+                      <div className="p-3 rounded-xl glass-panel border border-white/10 flex items-start gap-3">
+                        <div className="p-2 rounded-lg bg-white/5 text-[#FF5A1F] shrink-0 mt-0.5">
+                          <Zap className="w-3.5 h-3.5" />
+                        </div>
+                        <div className="min-w-0">
+                          <span className="text-[10px] font-mono uppercase text-white/40 block">
+                            Powertrain & Architecture
+                          </span>
+                          <p className="text-white font-medium text-xs mt-0.5 leading-snug">
+                            {car.specs.engine}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Drivetrain Detail */}
+                      <div className="p-3 rounded-xl glass-panel border border-white/10 flex items-start gap-3">
+                        <div className="p-2 rounded-lg bg-white/5 text-cyan-400 shrink-0 mt-0.5">
+                          <Gauge className="w-3.5 h-3.5" />
+                        </div>
+                        <div className="min-w-0">
+                          <span className="text-[10px] font-mono uppercase text-white/40 block">
+                            Drivetrain & Traction
+                          </span>
+                          <p className="text-white font-medium text-xs mt-0.5 leading-snug">
+                            {car.specs.drivetrain}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Chassis Detail */}
+                      <div className="p-3 rounded-xl glass-panel border border-white/10 flex items-start gap-3">
+                        <div className="p-2 rounded-lg bg-white/5 text-purple-400 shrink-0 mt-0.5">
+                          <Shield className="w-3.5 h-3.5" />
+                        </div>
+                        <div className="min-w-0">
+                          <span className="text-[10px] font-mono uppercase text-white/40 block">
+                            Chassis & Structure
+                          </span>
+                          <p className="text-white font-medium text-xs mt-0.5 leading-snug">
+                            {car.specs.chassis}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Curb Weight */}
+                      <div className="p-3 rounded-xl glass-panel border border-white/10 flex items-start gap-3">
+                        <div className="p-2 rounded-lg bg-white/5 text-amber-400 shrink-0 mt-0.5">
+                          <Scale className="w-3.5 h-3.5" />
+                        </div>
+                        <div className="min-w-0">
+                          <span className="text-[10px] font-mono uppercase text-white/40 block">
+                            Curb Weight
+                          </span>
+                          <p className="text-white font-medium text-xs mt-0.5 leading-snug">
+                            {car.specs.weight}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Battery / Range Detail */}
+                      {(car.specs.batteryCapacity || car.range) && (
+                        <div className="p-3 rounded-xl glass-panel border border-white/10 flex items-start gap-3 sm:col-span-2">
+                          <div className="p-2 rounded-lg bg-white/5 text-emerald-400 shrink-0 mt-0.5">
+                            <Battery className="w-3.5 h-3.5" />
+                          </div>
+                          <div className="min-w-0 flex-1 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            {car.specs.batteryCapacity && (
+                              <div>
+                                <span className="text-[10px] font-mono uppercase text-white/40 block">
+                                  High-Voltage Battery
+                                </span>
+                                <p className="text-white font-medium text-xs mt-0.5">
+                                  {car.specs.batteryCapacity}
+                                </p>
+                              </div>
+                            )}
+                            {car.range && (
+                              <div>
+                                <span className="text-[10px] font-mono uppercase text-white/40 block">
+                                  Estimated Range
+                                </span>
+                                <p className="text-white font-medium text-xs mt-0.5">
+                                  {car.range}
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ) : modalTab === 'architecture' ? (
                   <div className="space-y-4">
                     {/* Specs Breakdown */}
                     <div className="space-y-2">
                       <h4 className="text-xs font-mono uppercase tracking-widest text-[#BEBEBE]">
-                        // TECHNICAL ARCHITECTURE
+                        // MECHANICAL ARCHITECTURE
                       </h4>
                       <div className="grid grid-cols-2 gap-y-2 text-xs">
                         <div>
@@ -246,7 +469,7 @@ export const CarDetailModal: React.FC<CarDetailModalProps> = ({
                     {/* Key Features list */}
                     <div className="space-y-2">
                       <h4 className="text-xs font-mono uppercase tracking-widest text-[#BEBEBE]">
-                        // HIGHLIGHT FEATURES
+                        // BESPOKE HIGHLIGHT FEATURES
                       </h4>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         {car.features.map((feat, i) => (
@@ -257,10 +480,6 @@ export const CarDetailModal: React.FC<CarDetailModalProps> = ({
                         ))}
                       </div>
                     </div>
-                  </div>
-                ) : modalTab === 'audioEngine' ? (
-                  <div className="space-y-4">
-                    <EngineSoundControl car={car} />
                   </div>
                 ) : modalTab === 'simulation' ? (
                   /* D3.js Performance Simulation Tool */

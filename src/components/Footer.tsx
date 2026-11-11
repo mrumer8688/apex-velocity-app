@@ -32,7 +32,7 @@ export const Footer: React.FC = () => {
               <div className="w-8 h-8 bg-[#FF5A1F] rounded-sm flex items-center justify-center rotate-45 glow-orange">
                 <div className="w-4 h-4 bg-[#050505] rounded-sm" />
               </div>
-              <span className="font-display text-xl font-bold tracking-[0.2em] text-white uppercase">
+              <span className="font-orbitron text-xl font-black tracking-[0.22em] text-white uppercase">
                 APEX <span className="text-[#FF5A1F]">VELOCITY</span>
               </span>
             </div>
